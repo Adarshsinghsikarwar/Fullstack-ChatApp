@@ -1,5 +1,10 @@
 import express from "express";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
+import {
+  getUsers,
+  fetchMessage,
+  sendMessage,
+} from "../controllers/message.controller.js";
 
 const messageRouter = express.Router();
 

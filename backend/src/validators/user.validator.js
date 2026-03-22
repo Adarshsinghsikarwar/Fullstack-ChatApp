@@ -28,8 +28,6 @@ export const registerValidation = [
 export const loginValidation = [
   body("email")
     .notEmpty()
-    .withMessage("Email is required")
-    .isEmail()
-    .withMessage("Invalid email address"),
+    .withMessage("Email is required"),
   body("password").notEmpty().withMessage("Password is required"),
 ];

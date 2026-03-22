@@ -10,7 +10,10 @@ const messageSchema = new mongoose.Schema(
     recipientId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+    },
+    groupId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Group",
     },
     content: {
       type: String,
