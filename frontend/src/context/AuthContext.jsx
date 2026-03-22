@@ -11,6 +11,10 @@ export const AuthProvider = ({ children }) => {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
 
+  const getErrorMessage = (error, fallback = "An error occurred") => {
+    return error?.response?.data?.message || fallback;
+  };
+
   const checkAuth = async () => {
     try {
       const res = await axiosInstance.get("/auth/me");
@@ -33,7 +37,7 @@ export const AuthProvider = ({ children }) => {
       setAuthUser(res.data.user);
       toast.success("Account created successfully");
     } catch (error) {
-      toast.error(error.response.data.message || "An error occurred");
+      toast.error(getErrorMessage(error));
     }
   };
 
@@ -43,7 +47,7 @@ export const AuthProvider = ({ children }) => {
       setAuthUser(res.data.user);
       toast.success("Logged in successfully");
     } catch (error) {
-      toast.error(error.response.data.message || "An error occurred");
+      toast.error(getErrorMessage(error));
     }
   };
 
@@ -53,7 +57,7 @@ export const AuthProvider = ({ children }) => {
       setAuthUser(null);
       toast.success("Logged out successfully");
     } catch (error) {
-      toast.error(error.response.data.message || "An error occurred");
+      toast.error(getErrorMessage(error));
     }
   };
 
@@ -64,7 +68,7 @@ export const AuthProvider = ({ children }) => {
       setAuthUser(res.data.user);
       toast.success("Profile updated successfully");
     } catch (error) {
-      toast.error(error.response.data.message || "Failed to update profile");
+      toast.error(getErrorMessage(error, "Failed to update profile"));
     } finally {
       setIsUpdatingProfile(false);
     }
