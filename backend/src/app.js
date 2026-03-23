@@ -5,11 +5,12 @@ import authRouter from "./routes/auth.route.js";
 import messageRouter from "./routes/message.route.js";
 import groupRouter from "./routes/group.route.js";
 import morgan from "morgan";
+import { config } from "./config/config.js";
 
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:5173", "*"],
+    origin: [config.CLIENT_URL],
     credentials: true,
   })
 );
