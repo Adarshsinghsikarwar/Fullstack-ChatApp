@@ -15,7 +15,7 @@ const ChatContext = createContext();
 
 export const useChat = () => useContext(ChatContext);
 
-const BASE_URL = "https://fullstack-chatapp-0dvc.onrender.com";
+const BASE_URL = "https://fullstack-chatapp-j0vu.onrender.com";
 
 export const ChatProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
