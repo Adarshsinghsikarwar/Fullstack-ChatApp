@@ -8,10 +8,15 @@ import morgan from "morgan";
 import { corsOriginValidator } from "./config/cors.js";
 
 const app = express();
+app.set("trust proxy", 1);
+
 app.use(
   cors({
     origin: corsOriginValidator,
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 204,
   })
 );
 app.use(express.json());

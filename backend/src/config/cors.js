@@ -17,24 +17,21 @@ const configuredOrigins = [
 
 const uniqueConfiguredOrigins = [...new Set(configuredOrigins)];
 
-const fallbackOrigins =
-  uniqueConfiguredOrigins.length > 0 || config.NODE_ENV === "production"
+export const allowedOrigins =
+  config.NODE_ENV === "production"
     ? uniqueConfiguredOrigins
-    : defaultDevOrigins;
-
-export const allowedOrigins = fallbackOrigins;
+    : [...new Set([...uniqueConfiguredOrigins, ...defaultDevOrigins])];
 
 export const corsOriginValidator = (origin, callback) => {
-  // Some tools/servers omit Origin; allow these non-browser requests.
+  // Allow server-to-server or non-browser requests that do not send Origin.
   if (!origin) {
     callback(null, true);
     return;
   }
 
   const normalizedOrigin = normalizeOrigin(origin);
-  const isAllowed = allowedOrigins.includes(normalizedOrigin);
 
-  if (isAllowed) {
+  if (allowedOrigins.includes(normalizedOrigin)) {
     callback(null, true);
     return;
   }

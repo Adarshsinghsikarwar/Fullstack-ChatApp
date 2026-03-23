@@ -6,7 +6,7 @@ import {
   useCallback,
   useMemo,
 } from "react";
-import { axiosInstance } from "../lib/axios.js";
+import { API_ORIGIN, axiosInstance } from "../lib/axios.js";
 import { useAuth } from "./AuthContext";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
@@ -15,7 +15,12 @@ const ChatContext = createContext();
 
 export const useChat = () => useContext(ChatContext);
 
-const BASE_URL = "https://fullstack-chatapp-j0vu.onrender.com";
+const normalizeUrl = (url = "") => url.trim().replace(/\/+$/, "");
+
+const SOCKET_BASE_URL = (() => {
+  const socketEnvUrl = normalizeUrl(import.meta.env.VITE_SOCKET_URL || "");
+  return socketEnvUrl || API_ORIGIN;
+})();
 
 export const ChatProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
@@ -36,8 +41,14 @@ export const ChatProvider = ({ children }) => {
   // Socket Connection logic - Only depends on authUser
   useEffect(() => {
     if (authUser) {
-      const newSocket = io(BASE_URL, {
+      const newSocket = io(SOCKET_BASE_URL, {
         query: { userId: authUser._id },
+        withCredentials: true,
+        transports: ["websocket", "polling"],
+        reconnection: true,
+        reconnectionAttempts: 10,
+        reconnectionDelay: 1000,
+        timeout: 20000,
       });
       setSocket(newSocket);
 

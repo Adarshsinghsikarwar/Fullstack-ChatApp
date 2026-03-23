@@ -3,6 +3,11 @@ import jwt from "jsonwebtoken";
 import { config } from "../config/config.js";
 import bcrypt from "bcrypt";
 
+const buildAuthCookieOptions = (withMaxAge = false) => ({
+  ...config.COOKIE_OPTIONS,
+  ...(withMaxAge ? { maxAge: 7 * 24 * 60 * 60 * 1000 } : {}),
+});
+
 export async function registerUser(req, res) {
   const { username, email, password, fullName } = req.body;
   try {
@@ -29,12 +34,7 @@ export async function registerUser(req, res) {
     const token = jwt.sign({ userId: newUser._id }, config.SECRET_KEY, {
       expiresIn: "7d",
     });
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie("token", token, buildAuthCookieOptions(true));
 
     const userToReturn = newUser.toObject();
     delete userToReturn.password;
@@ -80,12 +80,7 @@ export async function loginUser(req, res) {
     const token = jwt.sign({ userId: user._id }, config.SECRET_KEY, {
       expiresIn: "7d",
     });
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie("token", token, buildAuthCookieOptions(true));
 
     const userToReturn = user.toObject();
     delete userToReturn.password;
@@ -99,11 +94,7 @@ export async function loginUser(req, res) {
 
 export async function logoutUser(req, res) {
   try {
-    res.clearCookie("token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
+    res.clearCookie("token", buildAuthCookieOptions());
     res.status(200).json({ message: "Logout successful" });
   } catch (error) {
     console.error("Error during user logout:", error);
