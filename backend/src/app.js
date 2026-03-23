@@ -21,4 +21,8 @@ app.use("/api/auth", authRouter);
 app.use("/api/messages", messageRouter);
 app.use("/api/groups", groupRouter);
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 export default app;
