@@ -5,12 +5,12 @@ import authRouter from "./routes/auth.route.js";
 import messageRouter from "./routes/message.route.js";
 import groupRouter from "./routes/group.route.js";
 import morgan from "morgan";
-import { config } from "./config/config.js";
+import { corsOriginValidator } from "./config/cors.js";
 
 const app = express();
 app.use(
   cors({
-    origin: [config.CLIENT_URL],
+    origin: corsOriginValidator,
     credentials: true,
   })
 );

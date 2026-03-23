@@ -1,12 +1,12 @@
 import { Server } from "socket.io";
-import { config } from "./config";
+import { corsOriginValidator } from "./cors.js";
 
 let io;
 
 export function init(server) {
   io = new Server(server, {
     cors: {
-      origin: [config.CLIENT_URL],
+      origin: corsOriginValidator,
       credentials: true,
     },
   });
