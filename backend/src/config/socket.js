@@ -1,11 +1,12 @@
 import { Server } from "socket.io";
+import { config } from "./config";
 
 let io;
 
 export function init(server) {
   io = new Server(server, {
     cors: {
-      origin: ["http://localhost:5173", "http://localhost:5174"],
+      origin: [config.CLIENT_URL],
       credentials: true,
     },
   });
