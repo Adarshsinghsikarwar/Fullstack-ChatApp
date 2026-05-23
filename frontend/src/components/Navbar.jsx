@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
-import { LogOut, MessageSquare, User, Settings } from "lucide-react";
+import { LogOut, MessageSquare, User } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
@@ -26,17 +26,6 @@ const Navbar = () => {
 
           {/* Navigation Section */}
           <div className="flex items-center gap-3">
-            <NavLink
-              to="/settings"
-              className={({ isActive }) => 
-                `btn btn-sm gap-2 transition-all duration-200 border border-transparent
-                ${isActive ? "bg-primary/10 text-primary border-primary/20" : "bg-base-200 hover:bg-base-300"}`
-              }
-            >
-              <Settings className="w-4 h-4" />
-              <span className="hidden sm:inline">Settings</span>
-            </NavLink>
-
             {authUser && (
               <>
                 <NavLink
